@@ -20,6 +20,8 @@ Một website đặt vé xem phim lấy cảm hứng từ các hệ thống rạ
 ![Home Page](./FE_Movie_Node50/public/images/HomePage.png)
 ### 🔑 Đăng nhập
 ![Login Page](./FE_Movie_Node50/public/images/LoginPage.png)
+### 🔑 Đăng ký
+![SignUp Page](./FE_Movie_Node50/public/images/SignUpPage.png)
 ### 🎟️ Trang chi tiết phim và lịch chiếu
 ![Detail Page](./FE_Movie_Node50/public/images/DetailPage.png)
 ![Showtimes Page](./FE_Movie_Node50/public/images/ShowTimePage.png)
@@ -72,7 +74,7 @@ AppMovie/
 
 ### 1. Clone Repo
 cmd
-git clone https://github.com/Vanquoc0201/AppMovie_NextJS.git
+git clone https://github.com/Vanquoc0201/AppMovie.git
 cd AppMovie_NextJS
 ### 2. Run BE
 start image docker
