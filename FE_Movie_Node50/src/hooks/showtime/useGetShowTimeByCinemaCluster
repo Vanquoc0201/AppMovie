@@ -1,0 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import { cinemaService } from '../../services/cinemaService';
+export const useShowtimesByCinemaCluster = (maHeThongRap: number) => {
+  return useQuery({
+    queryKey: ['showtimesbycinemacluster', maHeThongRap],
+    queryFn: () => cinemaService.getShowtimeCinemaCluster(maHeThongRap),
+    enabled: !!maHeThongRap,
+    select: (res) => res?.lichChieu || [],
+  });
+};
