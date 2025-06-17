@@ -1,72 +1,68 @@
-import React, { useState } from "react";
-import ModalWrapper from "./modalwrapper";
-import UserUpdateForm from "./updateform";
 import { TUpdateUser } from "@/types/user/update-user.type";
-import { useUpdateUsers } from "@/hooks/user/useUpdateUsers";
+import { convertUserToUpdateUser } from "@/helpers/convert/user";
+import { TUser } from "@/types/user/user.type";
 
-const UserTable = ({ users }: { users: TUpdateUser[] }) => {
-  const [selectedUser, setSelectedUser] = useState<TUpdateUser | null>(null);
+interface Props {
+  users: TUser[];
+  onDelete: (taiKhoan: string) => void;
+  onUpdate: (user: TUpdateUser) => void;
+}
 
-  const { mutateAsync, isPending, error } = useUpdateUsers();
-
-  const openModal = (user: TUpdateUser) => {
-    setSelectedUser(user);
-  };
-
-  const closeModal = () => {
-    setSelectedUser(null);
-  };
-
-  const handleSubmit = async (data: TUpdateUser) => {
-  try {
-    const payload = {
-      taiKhoan: data.taiKhoan,
-      hoTen: data.hoTen,
-      email: data.email,
-      soDt: data.soDt,
-      loaiNguoiDung: data.loaiNguoiDung,
-    };
-    await mutateAsync(payload);
-    console.log("Đã cập nhật thành công:", payload);
-    closeModal();
-  } catch (err) {
-    console.error("Lỗi khi cập nhật:", err);
-  }
-};
-
-
+const UserTable = ({ users, onDelete, onUpdate }: Props) => {
   return (
-    <div>
-      {users.map((user) => (
-        <div key={user.taiKhoan} className="mb-2">
-          <span>{user.taiKhoan}</span>
-          <button
-            className="ml-2 bg-blue-500 text-white px-2 py-1 rounded"
-            onClick={() => openModal(user)}
-          >
-            Cập nhật
-          </button>
-        </div>
-      ))}
-
-      {selectedUser && (
-        <ModalWrapper onClose={closeModal}>
-          <UserUpdateForm
-            user={{
-              taiKhoan: selectedUser.taiKhoan,
-              hoTen: selectedUser.hoTen,
-              email: selectedUser.email,
-              soDt: selectedUser.soDt,
-              loaiNguoiDung: selectedUser.loaiNguoiDung,
-            }}
-            onCancel={closeModal}
-            onSubmit={handleSubmit}
-            isPending={isPending}
-          />
-          {error && <div className="text-red-500 mt-2">Lỗi: {(error as Error).message}</div>}
-        </ModalWrapper>
-      )}
-    </div>
+    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <thead className="bg-black text-white">
+        <tr>
+          <th className="px-4 py-2">#</th>
+          <th className="px-4 py-2">Tài khoản</th>
+          <th className="px-4 py-2">Họ tên</th>
+          <th className="px-4 py-2">Email</th>
+          <th className="px-4 py-2">Số ĐT</th>
+          <th className="px-4 py-2">Loại</th>
+          <th className="px-4 py-2">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.length ? (
+          users.map((user, index) => (
+            <tr key={user.taiKhoan} className="border-t hover:bg-gray-100">
+              <td className="px-4 py-2">{index + 1}</td>
+              <td className="px-4 py-2 font-semibold text-red-600">{user.taiKhoan}</td>
+              <td className="px-4 py-2">{user.hoTen}</td>
+              <td className="px-4 py-2">{user.email}</td>
+              <td className="px-4 py-2">{user.soDt}</td>
+              <td className="px-4 py-2">
+                <span className="px-2 py-1 bg-red-100 text-red-800 rounded text-sm">
+                  {user.loaiNguoiDung}
+                </span>
+              </td>
+              <td className="px-4 py-2">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onDelete(user.taiKhoan)}
+                    className="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-full"
+                  >
+                    Xóa
+                  </button>
+                  <button
+                    onClick={() => onUpdate(convertUserToUpdateUser(user))}
+                    className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-full"
+                  >
+                    Cập nhật
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan={7} className="text-center py-4 text-gray-500">
+              Không tìm thấy người dùng nào.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   );
 };
 

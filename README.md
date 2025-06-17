@@ -75,7 +75,7 @@ AppMovie/
 ### 1. Clone Repo
 cmd
 git clone https://github.com/Vanquoc0201/AppMovie.git
-cd AppMovie_NextJS
+cd AppMovie
 ### 2. Run BE
 start image docker
 config db_movie to db_movie-export because it has data
